@@ -1,0 +1,48 @@
+.navbar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 80px;
+  background-color: #f8e8c6; 
+  padding: 10px 0;
+  height: 100vh;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.link {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.2s;
+  color: black; /* Set icon color to black */
+
+  &[data-active='true'] {
+    background-color: #ed5f49; 
+    color: white; /* Active state color */
+    transform: scale(1.1); 
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: scale(1.05); 
+  }
+}
+
+.navbarMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 20px;
+}
