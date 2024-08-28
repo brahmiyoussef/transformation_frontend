@@ -137,7 +137,9 @@ export function TableSort({ data, onShowOutput }: TableSortProps) {
             <Th sorted={sortBy === 'timestamp'} reversed={reverseSortDirection} onSort={() => setSorting('timestamp')}>
               Uploaded At
             </Th>
-            <Th>Show Output</Th>
+            <Th reversed={false} sorted={false} onSort={() => {}}>
+              Show Output
+            </Th>
           </Table.Tr>
         </Table.Tbody>
         <Table.Tbody>

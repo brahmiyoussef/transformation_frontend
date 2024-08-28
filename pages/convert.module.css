@@ -2,19 +2,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 0 20px;
-  
+  height: 120vh;
+  padding: 2 50px;
+  overflow: hidden; /* Empêche le débordement global */
 }
 
 .card {
-  max-width: 800px;
+  max-width: 1000px;
   width: 100%;
   background-color: #fdfcfa;
   padding: 40px;
   border: 1px solid black;
   border-radius: 8px;
   box-shadow: 0 3px 10px rgba(0, 1, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  height: auto; /* Laisse la carte s'adapter au contenu */
+  overflow: hidden; /* Empêche le débordement à l'intérieur de la carte */
 }
 
 .title {
@@ -38,12 +42,10 @@
   margin-top: 20px;
 }
 
-
 .button:hover {
   background-color: #f8e8c6;
   color: black;
-  border: 1px solid #ed5f49   ;
-
+  border: 1px solid #ed5f49;
 }
 
 .textarea {
@@ -51,4 +53,7 @@
   background-color: #f0f0f0;
   border: 1px solid #ced4da;
   border-radius: 4px;
+  max-height: 60vh; /* Limite la hauteur du textarea */
+  overflow-y: auto; /* Active le défilement si le contenu dépasse */
+  height: auto;
 }

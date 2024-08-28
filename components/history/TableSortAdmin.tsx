@@ -1,16 +1,9 @@
-import { useState, useEffect } from 'react';
-import {
-  Table,
-  ScrollArea,
-  UnstyledButton,
-  Group,
-  Text,
-  Center,
-  TextInput,
-  rem,
-} from '@mantine/core';
+// TableSortAdmin.tsx
+import React from 'react';
+import { Table, ScrollArea, UnstyledButton, Group, Text, Center, rem, TextInput } from '@mantine/core';
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons-react';
- 
+
+// Define RowData interface
 interface RowData {
   filename: string;
   inputType: string;
@@ -18,15 +11,22 @@ interface RowData {
   timestamp: string;
   id: string;
   userName: string;
+  user:string,
 }
- 
+
 interface ThProps {
   children: React.ReactNode;
   reversed: boolean;
   sorted: boolean;
   onSort(): void;
 }
- 
+
+interface TableSortProps {
+  data: RowData[];
+  onShowOutput: (id: string) => void;
+}
+
+// Th component for table headers
 function Th({ children, reversed, sorted, onSort }: ThProps) {
   const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
   return (
@@ -44,77 +44,78 @@ function Th({ children, reversed, sorted, onSort }: ThProps) {
     </Table.Th>
   );
 }
- 
+
+// Utility function to filter data based on search query
 function filterData(data: RowData[], search: string) {
   const query = search.toLowerCase().trim();
-  return data.filter((item) =>
-    Object.keys(item).some((key) =>
-      item[key as keyof RowData].toString().toLowerCase().includes(query)
+  return data.filter(item =>
+    Object.values(item).some(value =>
+      value.toString().toLowerCase().includes(query)
     )
   );
 }
- 
+
+// Utility function to sort and filter data
 function sortData(
   data: RowData[],
   payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
 ) {
-  const { sortBy } = payload;
- 
+  const { sortBy, reversed, search } = payload;
+
+  // Filter data based on search
+  const filteredData = filterData(data, search);
+
+  // If no sortBy is provided, return filtered data
   if (!sortBy) {
-    return filterData(data, payload.search);
+    return filteredData;
   }
- 
-  return filterData(
-    [...data].sort((a, b) => {
-      if (payload.reversed) {
-        return b[sortBy].localeCompare(a[sortBy]);
-      }
- 
-      return a[sortBy].localeCompare(b[sortBy]);
-    }),
-    payload.search
-  );
+
+  // Sort data based on sortBy field
+  return filteredData.sort((a, b) => {
+    if (reversed) {
+      return b[sortBy].localeCompare(a[sortBy]);
+    }
+    return a[sortBy].localeCompare(b[sortBy]);
+  });
 }
- 
-interface TableSortProps {
-  data: RowData[];
-  onShowOutput: (id: string) => void;
-}
- 
-export function TableSort({ data, onShowOutput }: TableSortProps) {
-  const [search, setSearch] = useState('');
-  const [sortedData, setSortedData] = useState(data);
-  const [sortBy, setSortBy] = useState<keyof RowData | null>('timestamp');
-  const [reverseSortDirection, setReverseSortDirection] = useState(false);
- 
-  useEffect(() => {
+
+// TableSortAdmin component
+function TableSortAdmin({ data, onShowOutput }: TableSortProps) {
+  const [search, setSearch] = React.useState('');
+  const [sortedData, setSortedData] = React.useState(data);
+  const [sortBy, setSortBy] = React.useState<keyof RowData | null>('timestamp');
+  const [reverseSortDirection, setReverseSortDirection] = React.useState(false);
+
+  React.useEffect(() => {
     setSortedData(sortData(data, { sortBy, reversed: reverseSortDirection, search }));
   }, [data, sortBy, reverseSortDirection, search]);
- 
+
   const setSorting = (field: keyof RowData) => {
     const reversed = field === sortBy ? !reverseSortDirection : false;
     setReverseSortDirection(reversed);
     setSortBy(field);
   };
- 
+
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setSearch(value);
   };
- 
+
   const rows = sortedData.map((row) => (
     <Table.Tr key={row.id}>
       <Table.Td>{row.filename}</Table.Td>
       <Table.Td>{row.inputType}</Table.Td>
       <Table.Td>{row.outputType}</Table.Td>
       <Table.Td>{new Date(row.timestamp).toLocaleString()}</Table.Td>
+  
+      <Table.Td>{row.userName}</Table.Td>
       <Table.Td>
         <button onClick={() => onShowOutput(row.id)}>Show Output</button>
       </Table.Td>
-      <Table.Td>{row.userName}</Table.Td>
     </Table.Tr>
   ));
- 
+  
+
   return (
     <ScrollArea>
       <TextInput
@@ -140,9 +141,11 @@ export function TableSort({ data, onShowOutput }: TableSortProps) {
               Uploaded At
             </Th>
             <Th sorted={sortBy === 'userName'} reversed={reverseSortDirection} onSort={() => setSorting('userName')}>
-              Uploaded At
+              User Name
             </Th>
-            <Th>Show Output</Th>
+            <Th reversed={false} sorted={false} onSort={() => {}}>
+            Show Output
+            </Th>
           </Table.Tr>
         </Table.Tbody>
         <Table.Tbody>
@@ -150,7 +153,7 @@ export function TableSort({ data, onShowOutput }: TableSortProps) {
             rows
           ) : (
             <Table.Tr>
-              <Table.Td colSpan={data.length > 0 ? Object.keys(data[0]).length : 5}>
+              <Table.Td colSpan={Object.keys(data[0] || {}).length + 1}>
                 <Text fw={500} ta="center">
                   Nothing found
                 </Text>
@@ -162,5 +165,5 @@ export function TableSort({ data, onShowOutput }: TableSortProps) {
     </ScrollArea>
   );
 }
- 
- 
+
+export { TableSortAdmin };

@@ -5,6 +5,8 @@ import FileUploadForm from '../components/convert/FileuploadForm';
 import { NavbarMinimal } from '../components/Navbar/NavbarMinimal';
 import styles from './convert.module.css';
 import Cookies from 'js-cookie';
+import withAuth from './withAuth';
+ 
 
 function ConvertPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -39,46 +41,51 @@ function ConvertPage() {
       setConvertedContent(responseData);
     } catch (error) {
       console.error('Error converting file:', error);
-      alert('Error converting file: ' + error.message);
+      alert('Error converting file: ' + (error as Error).message);
     }
+    
   };
 
   return (
-      <Flex style={{ height: '100vh' }}>
-        <NavbarMinimal style={{ width: '250px', flexShrink: 0 }} /> {/* Navbar added */}
-        <Container className={styles.container}>
-          <Card className={styles.card}>
-            <Title className={styles.title}>File Conversion Service</Title>
-
-            <FileUploadForm
-                handleFileChange={handleFileChange}
-                fromFormat={fromFormat}
-                setFromFormat={setFromFormat}
-                toFormat={toFormat}
-                setToFormat={setToFormat}
-            />
-
-            <div className={styles['button-container']}>
-              <Button onClick={handleConvert} className={styles.button}>
-                Convert
-              </Button>
-            </div>
-
-            {convertedContent && (
-                <Textarea
-                    label="Converted Content"
-                    value={convertedContent}
-                    readOnly
-                    autosize
-                    minRows={4}
-                    className={styles.textarea}
-                />
-            )}
-          </Card>
-        </Container>
-      </Flex>
+    <Flex style={{ height: '100vh' }}>
+    <div style={{ width: '250px', flexShrink: 0 }}>
+      <NavbarMinimal />
+    </div>
+    <Container className={styles.container}>
+      <Card className={styles.card}>
+        <Title className={styles.title}>File Conversion Service</Title>
+  
+        <FileUploadForm
+          handleFileChange={handleFileChange}
+          fromFormat={fromFormat}
+          setFromFormat={setFromFormat}
+          toFormat={toFormat}
+          setToFormat={setToFormat}
+        />
+  
+        <div className={styles['button-container']}>
+          <Button onClick={handleConvert} className={styles.button}>
+            Convert
+          </Button>
+        </div>
+  
+        {convertedContent && (
+          <Textarea
+            label="Converted Content"
+            value={convertedContent}
+            readOnly
+            autosize
+            minRows={4}
+            className={styles.textarea}
+          />
+        )}
+      </Card>
+    </Container>
+  </Flex>
+  
   );
 }
 
-export default ConvertPage;
+export default withAuth(ConvertPage);
+ 
  

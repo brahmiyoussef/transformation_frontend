@@ -1,0 +1,60 @@
+.wrapper {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .navbar {
+    flex-shrink: 0;
+  }
+  
+  .container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .centeredCard {
+    background-color: white;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    max-width: 600px;
+  }
+  
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .movingCircle {
+    width: 30px;
+    height: 30px;
+    background-color: #000;  
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: moveAround 5s infinite alternate; 
+  }
+  
+  @keyframes moveAround {
+    0% {
+      transform: translate(-50%, -50%);
+    }
+    25% {
+      transform: translate(100px, -100px); /* Haut droite */
+    }
+    50% {
+      transform: translate(-100px, 100px); /* Bas gauche */
+    }
+    75% {
+      transform: translate(200px, 100px); /* Bas droite */
+    }
+    100% {
+      transform: translate(-200px, -200px); /* Haut gauche */
+    }
+  }
+  

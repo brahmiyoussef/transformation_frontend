@@ -1,6 +1,8 @@
 import React from 'react';
 import Navbar from '../components/Navbar/NavbarMinimal';
 import { UserInfoIcons } from '@/components/User/UserInfoIcons';
+import withAuth from './withAuth';
+ 
 
 const ProfilPage = () => {
   return (
@@ -17,4 +19,5 @@ const ProfilPage = () => {
   );
 };
 
-export default ProfilPage;
+export default withAuth(ProfilPage);
+ 

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Text, Group } from '@mantine/core';
+import { Avatar, Text, Group, Card } from '@mantine/core';
 import { IconPhoneCall, IconAt } from '@tabler/icons-react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import classes from './UserInfoIcons.module.css';
+import Image from 'next/image';
+import logo from '../../icon.png';
 
 interface UserInfo {
   name: string;
@@ -26,16 +28,15 @@ export function UserInfoIcons() {
           return;
         }
 
-        // Ensure that the userID is being sent correctly as a query parameter
         const response = await axios.get(`http://localhost:8081/userInfo`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
             'Content-Type': 'application/json',
           },
-          params: { userId: userID }, // Query parameter
+          params: { userId: userID },
         });
 
-        console.log('User Info:', response.data); // Log user info to console
+        console.log('User Info:', response.data);
         setUserInfo(response.data);
       } catch (error) {
         console.error('Error fetching user info', error);
@@ -50,9 +51,13 @@ export function UserInfoIcons() {
   }
 
   return (
-    <div>
+    <Card withBorder radius="md" padding="lg" shadow="md" className={classes.card}>
       <Group wrap="nowrap">
-        
+        <Avatar
+          src={logo.src}
+          size={94}
+          radius="md"
+        />
         <div>
           <Text fz="xs" tt="uppercase" fw={700} c="dimmed">
             {userInfo.role || 'User'}
@@ -77,6 +82,6 @@ export function UserInfoIcons() {
           </Group>
         </div>
       </Group>
-    </div>
+    </Card>
   );
 }
